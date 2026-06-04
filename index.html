@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CintaCocok — Jodoh Kecocokan</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f9e3e0 0%, #ffe6e9 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .card {
+            max-width: 1100px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 3rem 3rem 2.5rem 2.5rem;
+            box-shadow: 0 30px 50px rgba(190, 70, 100, 0.25), 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 2rem 2rem 2.5rem;
+            border: 1px solid rgba(255, 220, 230, 0.5);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #a63b5b;
+            text-align: center;
+            letter-spacing: -0.5px;
+            text-shadow: 2px 2px 0 #ffe2e8;
+            margin-bottom: 0.4rem;
+        }
+
+        .subhead {
+            text-align: center;
+            color: #b85673;
+            font-weight: 300;
+            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
+            border-bottom: 2px dashed #fbc1cb;
+            padding-bottom: 0.8rem;
+        }
+
+        .row-duo {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.8rem;
+            margin-bottom: 2.8rem;
+        }
+
+        .profile-col {
+            flex: 1 1 280px;
+            background: white;
+            border-radius: 2rem;
+            padding: 1.8rem 1.5rem;
+            box-shadow: 0 15px 25px #ffd9df;
+            border: 2px solid #ffb6c7;
+            transition: all 0.2s ease;
+        }
+
+        .profile-col:hover {
+            border-color: #ff8da1;
+            box-shadow: 0 20px 30px #fec5d0;
+        }
+
+        .gender-badge {
+            font-size: 1.9rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px dotted #ffb0c0;
+            text-align: center;
+        }
+
+        .input-group {
+            margin-bottom: 1.2rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-weight: 600;
+            color: #a5385a;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+        }
+
+        .input-group input {
+            background: #fff6f8;
+            border: 2px solid #ffd2dc;
+            border-radius: 40px;
+            padding: 0.7rem 1.2rem;
+            font-size: 0.95rem;
+            outline: none;
+            transition: 0.2s;
+            color: #2d1e22;
+        }
+
+        .input-group input:focus {
+            border-color: #e86f8b;
+            background: white;
+            box-shadow: 0 0 0 4px #fcd5dd;
+        }
+
+        .tombol-hitung {
+            background: #c75070;
+            border: none;
+            color: white;
+            font-weight: 700;
+            font-size: 1.5rem;
+            padding: 1rem 2rem;
+            border-radius: 60px;
+            width: fit-content;
+            margin: 0 auto 2.5rem auto;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 8px 0 #83344d, 0 12px 25px #e39eb0;
+            transition: 0.07s linear;
+            cursor: pointer;
+            border: 2px solid #ffb8cb;
+        }
+
+        .tombol-hitung:active {
+            transform: translateY(8px);
+            box-shadow: 0 2px 0 #83344d, 0 12px 25px #e39eb0;
+        }
+
+        .result-panel {
+            background: #fef0f3;
+            border-radius: 3rem;
+            padding: 1.8rem 1.8rem 2rem;
+            border: 3px solid white;
+            box-shadow: inset 0 0 0 2px #ffc1cf, 0 15px 30px #fbb9c9;
+        }
+
+        .cocok-meter {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+        }
+
+        .nilai-angkanya {
+            background: #c43e65;
+            width: 170px;
+            height: 170px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 0 #732b44, 0 12px 30px #d36b89;
+            border: 4px solid #ffcddc;
+        }
+
+        .nilai-angkanya .percent-big {
+            font-size: 3.8rem;
+            font-weight: 800;
+            line-height: 1;
+            color: white;
+            text-shadow: 0 3px 0 #561f32;
+        }
+
+        .nilai-angkanya .label-small {
+            font-size: 1.2rem;
+            color: #ffeef2;
+            font-weight: 500;
+        }
+
+        .kata-kata-cinta {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .kata-kata-cinta p {
+            background: white;
+            border-radius: 40px;
+            padding: 1rem 2rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #ac3458;
+            border: 3px solid #ffb4c7;
+            box-shadow: 0 4px 0 #d66b89;
+            margin-bottom: 0.8rem;
+        }
+
+        .kata-kata-cinta .detail-hobi {
+            font-size: 1rem;
+            background: #ffecf0;
+            border: 2px dashed #b84c6c;
+            color: #732e47;
+            font-weight: 400;
+            padding: 0.8rem 1.2rem;
+            border-radius: 30px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: #b75473;
+            font-style: italic;
+            font-weight: 300;
+        }
+
+        .reset-btn {
+            background: #b88e9b;
+            border: none;
+            color: white;
+            font-weight: 700;
+            font-size: 1.5rem;
+            padding: 1rem 2rem;
+            border-radius: 60px;
+            width: fit-content;
+            margin: 0 auto 2.5rem auto;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 8px 0 #73505e;
+            transition: 0.07s linear;
+            cursor: pointer;
+            border: 2px solid #ffb8cb;
+        }
+
+        .reset-btn:active {
+            transform: translateY(8px);
+            box-shadow: 0 2px 0 #73505e;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 2.5rem;
+        }
+
+        .special-badge {
+            text-align: center;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: #c75070;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>JODOH KECOCOKAN</h1>
+    <div class="subhead">isi data kamu dan pasangan</div>
+
+    <div class="row-duo">
+        <div class="profile-col">
+            <div class="gender-badge">
+                Laki-laki
+            </div>
+
+            <div class="input-group">
+                <label>NAMA</label>
+                <input type="text" id="maleNama" value="">
+            </div>
+            <div class="input-group">
+                <label>UMUR</label>
+                <input type="number" id="maleUmur" value="">
+            </div>
+            <div class="input-group">
+                <label>HOBI</label>
+                <input type="text" id="maleHobi" value="">
+            </div>
+            <div class="input-group">
+                <label>SUKU</label>
+                <input type="text" id="maleSuku" value="">
+            </div>
+        </div>
+
+        <div class="profile-col">
+            <div class="gender-badge">
+                Perempuan
+            </div>
+            <div class="input-group">
+                <label>NAMA</label>
+                <input type="text" id="femaleNama" value="">
+            </div>
+            <div class="input-group">
+                <label>UMUR</label>
+                <input type="number" id="femaleUmur" value="">
+            </div>
+            <div class="input-group">
+                <label>HOBI</label>
+                <input type="text" id="femaleHobi" value="">
+            </div>
+            <div class="input-group">
+                <label>SUKU</label>
+                <input type="text" id="femaleSuku" value="">
+            </div>
+        </div>
+    </div>
+
+    <div class="button-group">
+        <button class="tombol-hitung" id="hitungButton">
+            HITUNG KECOCOKAN
+        </button>
+        <button class="reset-btn" id="resetButton">
+            RESET
+        </button>
+    </div>
+
+    <div class="result-panel" id="resultPanel">
+        <div class="cocok-meter">
+            <div class="nilai-angkanya" id="nilaiBundar">
+                <span class="percent-big" id="percentValue">0</span>
+                <span class="label-small">cocok</span>
+            </div>
+            <div class="kata-kata-cinta">
+                <p id="pesanUtama">Isi data kamu dan pasangan</p>
+                <div class="detail-hobi" id="detailKecocokan">
+                    Lengkapi profil lalu klik hitung
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>Kesamaan membuat hubungan lebih hangat</footer>
+</div>
+
+<script>
+    (function() {
+        const maleNama = document.getElementById('maleNama');
+        const maleUmur = document.getElementById('maleUmur');
+        const maleHobi = document.getElementById('maleHobi');
+        const maleSuku = document.getElementById('maleSuku');
+
+        const femaleNama = document.getElementById('femaleNama');
+        const femaleUmur = document.getElementById('femaleUmur');
+        const femaleHobi = document.getElementById('femaleHobi');
+        const femaleSuku = document.getElementById('femaleSuku');
+
+        const percentSpan = document.getElementById('percentValue');
+        const pesanUtama = document.getElementById('pesanUtama');
+        const detailKecocokan = document.getElementById('detailKecocokan');
+
+        const btn = document.getElementById('hitungButton');
+        const resetBtn = document.getElementById('resetButton');
+
+        function norm(str) {
+            return str ? str.trim().toLowerCase() : '';
+        }
+
+        function cekDataKosong() {
+            const mNama = norm(maleNama.value);
+            const fNama = norm(femaleNama.value);
+            const mHobi = norm(maleHobi.value);
+            const fHobi = norm(femaleHobi.value);
+            const mSuku = norm(maleSuku.value);
+            const fSuku = norm(femaleSuku.value);
+            const mUmur = maleUmur.value;
+            const fUmur = femaleUmur.value;
+            
+            return !(mNama || fNama || mHobi || fHobi || mSuku || fSuku || mUmur || fUmur);
+        }
+
+        function hitungKecocokan() {
+            const mNamaRaw = maleNama.value;
+            const fNamaRaw = femaleNama.value;
+            const mNama = norm(mNamaRaw);
+            const fNama = norm(fNamaRaw);
+            const mHobi = norm(maleHobi.value);
+            const fHobi = norm(femaleHobi.value);
+            const mSuku = norm(maleSuku.value);
+            const fSuku = norm(femaleSuku.value);
+            
+            const mUmurRaw = maleUmur.value;
+            const fUmurRaw = femaleUmur.value;
+            const mUmur = mUmurRaw ? parseInt(mUmurRaw) : NaN;
+            const fUmur = fUmurRaw ? parseInt(fUmurRaw) : NaN;
+            
+            const dataKosong = cekDataKosong();
+            
+            if (dataKosong) {
+                percentSpan.innerText = '0';
+                pesanUtama.innerText = 'Isi data kamu dan pasangan';
+                detailKecocokan.innerText = 'Lengkapi profil lalu klik hitung';
+                const nilaiDiv = document.getElementById('nilaiBundar');
+                nilaiDiv.style.transform = 'scale(1)';
+                return;
+            }
+            
+            // SPECIAL RULE: jika nama laki = "adit" dan nama perempuan = "zara"
+            const isAditZara = (mNama === 'adit' && fNama === 'zara');
+            
+            let finalScore;
+            let pesan = '';
+            let detailTeks = '';
+            
+            if (isAditZara) {
+                // akurasi 99-100% (random antara 99 atau 100 biar menarik)
+                finalScore = Math.random() < 0.5 ? 99 : 100;
+                pesan = 'ISTIMEWA! Adit dan Zara memang jodoh sejati! 💕';
+                detailTeks = 'Pasangan spesial - Chemistry sempurna!';
+            } else {
+                // hitung normal dengan rentang 20-100
+                let rawScore = 20;
+                let kesamaanArr = [];
+                
+                if (mHobi && fHobi && mHobi === fHobi) {
+                    rawScore += 25;
+                    kesamaanArr.push('Hobi sama');
+                }
+                
+                if (mSuku && fSuku && mSuku === fSuku) {
+                    rawScore += 20;
+                    kesamaanArr.push('Suku sama');
+                }
+                
+                if (!isNaN(mUmur) && !isNaN(fUmur)) {
+                    const selisih = Math.abs(mUmur - fUmur);
+                    if (selisih <= 2) {
+                        rawScore += 15;
+                        kesamaanArr.push('Umur sangat dekat');
+                    } else if (selisih <= 5) {
+                        rawScore += 10;
+                        kesamaanArr.push('Umur cukup dekat');
+                    } else if (selisih <= 8) {
+                        rawScore += 5;
+                    }
+                }
+                
+                if (mNama && fNama && mNama.charAt(0) === fNama.charAt(0)) {
+                    rawScore += 5;
+                    kesamaanArr.push('Inisial nama sama');
+                }
+                
+                if (mNama && fNama && mNama === fNama) {
+                    rawScore += 5;
+                    kesamaanArr.push('Nama sama');
+                }
+                
+                // bonus jika kedua nama terisi
+                if (mNama && fNama) {
+                    rawScore += 3;
+                }
+                
+                // batasi rawScore antara 0-100
+                let normalized = Math.min(100, Math.max(0, rawScore));
+                finalScore = Math.min(100, Math.max(20, Math.round(normalized)));
+                
+                if (finalScore >= 90) pesan = 'Sempurna! Kalian jodoh sejati';
+                else if (finalScore >= 75) pesan = 'Sangat cocok! Pertahankan';
+                else if (finalScore >= 60) pesan = 'Cocok sekali, banyak kesamaan';
+                else if (finalScore >= 40) pesan = 'Cukup cocok, terus komunikasi';
+                else pesan = 'Masih butuh waktu, coba kenalan lebih dalam';
+                
+                if (kesamaanArr.length > 0) {
+                    detailTeks = kesamaanArr.join(' - ');
+                } else {
+                    detailTeks = 'Perbedaan justru membuat semakin menarik';
+                }
+            }
+            
+            percentSpan.innerText = finalScore;
+            pesanUtama.innerText = pesan;
+            detailKecocokan.innerText = detailTeks;
+            
+            const nilaiDiv = document.getElementById('nilaiBundar');
+            nilaiDiv.style.transform = 'scale(1.08)';
+            setTimeout(() => nilaiDiv.style.transform = 'scale(1)', 200);
+        }
+        
+        function resetAllFields() {
+            maleNama.value = '';
+            maleUmur.value = '';
+            maleHobi.value = '';
+            maleSuku.value = '';
+            femaleNama.value = '';
+            femaleUmur.value = '';
+            femaleHobi.value = '';
+            femaleSuku.value = '';
+            
+            percentSpan.innerText = '0';
+            pesanUtama.innerText = 'Isi data kamu dan pasangan';
+            detailKecocokan.innerText = 'Lengkapi profil lalu klik hitung';
+            const nilaiDiv = document.getElementById('nilaiBundar');
+            nilaiDiv.style.transform = 'scale(1)';
+        }
+        
+        btn.addEventListener('click', hitungKecocokan);
+        resetBtn.addEventListener('click', resetAllFields);
+        
+        window.addEventListener('load', function() {
+            percentSpan.innerText = '0';
+            pesanUtama.innerText = 'Isi data kamu dan pasangan';
+            detailKecocokan.innerText = 'Lengkapi profil lalu klik hitung';
+        });
+    })();
+</script>
+
+</body>
+</html>
