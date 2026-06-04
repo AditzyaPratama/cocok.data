@@ -196,6 +196,7 @@
             border: 3px solid #ffb4c7;
             box-shadow: 0 4px 0 #d66b89;
             margin-bottom: 0.8rem;
+            line-height: 1.4;
         }
 
         .kata-kata-cinta .detail-hobi {
@@ -246,14 +247,6 @@
             gap: 1.5rem;
             flex-wrap: wrap;
             margin-bottom: 2.5rem;
-        }
-
-        .special-badge {
-            text-align: center;
-            margin-top: 0.5rem;
-            font-size: 0.8rem;
-            color: #c75070;
-            font-weight: 500;
         }
     </style>
 </head>
@@ -406,12 +399,10 @@
             let detailTeks = '';
             
             if (isAditZara) {
-                // akurasi 99-100% (random antara 99 atau 100 biar menarik)
-                finalScore = Math.random() < 0.5 ? 99 : 100;
-                pesan = 'ISTIMEWA! Adit dan Zara memang jodoh sejati! 💕';
-                detailTeks = 'Pasangan spesial - Chemistry sempurna!';
+                finalScore = 100;
+                pesan = 'pasangan adzar memang jodoh sejati dan pasangan paling soswit didunia';
+                detailTeks = 'Adit & Zara - Soswit abadi! 💕';
             } else {
-                // hitung normal dengan rentang 20-100
                 let rawScore = 20;
                 let kesamaanArr = [];
                 
@@ -448,12 +439,10 @@
                     kesamaanArr.push('Nama sama');
                 }
                 
-                // bonus jika kedua nama terisi
                 if (mNama && fNama) {
                     rawScore += 3;
                 }
                 
-                // batasi rawScore antara 0-100
                 let normalized = Math.min(100, Math.max(0, rawScore));
                 finalScore = Math.min(100, Math.max(20, Math.round(normalized)));
                 
